@@ -19,7 +19,7 @@ public class BoardDao {
 	 * @throws SQLException
 	 */
 	public void insertBoard(Board board) throws SQLException {
-		ibatis.insert("insertBoard", board);
+		ibatis.insert("boards.insertBoard", board);
 	}
 	
 	/**
@@ -28,7 +28,7 @@ public class BoardDao {
 	 * @throws SQLException
 	 */
 	public int getTotalRows() throws SQLException {
-		return (Integer) ibatis.queryForObject("getTotalRows");
+		return (Integer) ibatis.queryForObject("boards.getTotalRows");
 	}
 	
 	/**
@@ -39,6 +39,6 @@ public class BoardDao {
 	 */
 	@SuppressWarnings("unchecked")
 	public List<Board> getBoards(Map<String, Object> param) throws SQLException {
-		return (List<Board>) ibatis.queryForList("getBoards", param);
+		return (List<Board>) ibatis.queryForList("boards.getBoards", param);
 	}
 }

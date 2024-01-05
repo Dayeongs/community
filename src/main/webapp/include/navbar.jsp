@@ -39,6 +39,9 @@
 			<li class="nav-item">
 				<a class="nav-link <%="board".equals(menu) ? "active" : "" %>" href="/community/board/list.jsp">게시판</a>
 			</li>
+			<li class="nav-item">
+				<a class="nav-link <%="todo".equals(menu) ? "active" : "" %>" href="/community/todo/list.jsp">일정관리</a>
+			</li>
 		</ul>
 		<ul class="navbar-nav">
 <%
