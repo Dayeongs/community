@@ -41,4 +41,23 @@ public class BoardDao {
 	public List<Board> getBoards(Map<String, Object> param) throws SQLException {
 		return (List<Board>) ibatis.queryForList("boards.getBoards", param);
 	}
+	
+	/**
+	 * 지정된 게시글번호에 해당하는 게시글 상세정보를 조회해서 반환한다.
+	 * @param no 조회할 게시글 번호
+	 * @return 게시글 정보를 포함하는 Board 객체
+	 * @throws SQLException
+	 */
+	public Board getBoardByNo(int no) throws SQLException {
+		return (Board) ibatis.queryForObject("boards.getBoardByNo", no);
+	}
+	
+	/**
+	 * 변경된 내용이 포함된 정보를 전달받아서 테이블에 반영시킨다.
+	 * @param board 변경된 내용이 포함된 Board 객체
+	 * @throws SQLException
+	 */
+	public void updateBoard(Board board) throws SQLException {
+		ibatis.update("boards.updateBoard", board);
+	}
 }

@@ -31,8 +31,9 @@
 	<!-- 
 		매핑된 SQL 구문이 정의된 SQL Mapper 파일의 경로를 등록하는 태그다.
 	 -->
-	<sqlMap resource="ibatis/mappers/users.xml" />
+	<sqlMap resource="ibatis/mappers/board-replies.xml" />
 	<sqlMap resource="ibatis/mappers/boards.xml" />
 	<sqlMap resource="ibatis/mappers/todo-categories.xml" />
 	<sqlMap resource="ibatis/mappers/todos.xml" />
+	<sqlMap resource="ibatis/mappers/users.xml" />
 </sqlMapConfig>   

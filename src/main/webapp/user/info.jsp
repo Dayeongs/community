@@ -1,3 +1,4 @@
+<%@page import="utils.DateUtils"%>
 <%@page import="vo.User"%>
 <%@page import="dao.UserDao"%>
 <%@page import="dto.LoginUser"%>
@@ -63,9 +64,9 @@
 					</tr>
 					<tr>
 						<th style="width:15%;">가입일자</th>
-						<td style="width:35%;"><%=savedUser.getCreatedDate() %></td>
+						<td style="width:35%;"><%=DateUtils.toText(savedUser.getCreatedDate()) %></td>
 						<th style="width:15%;">최종 수정일자</th>
-						<td style="width:35%;"><%=savedUser.getUpdatedDate() %></td>
+						<td style="width:35%;"><%=DateUtils.toText(savedUser.getUpdatedDate()) %></td>
 					</tr>
 				</tbody>
 			</table>

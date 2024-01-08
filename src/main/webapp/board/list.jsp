@@ -89,7 +89,7 @@
 %>
 					<tr>
 						<td><%=board.getNo() %></td>
-						<td><%=board.getTitle() %></td>
+						<td><a href="detail.jsp?no=<%=board.getNo() %>&page=<%=currentPage %>"><%=board.getTitle() %></a></td>
 						<td><%=board.getUser().getName() %></td>
 						<td><%=board.getReplyCnt() %></td>
 						<td><%=DateUtils.toText(board.getCreatedDate()) %></td>

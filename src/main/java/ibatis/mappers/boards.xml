@@ -83,4 +83,40 @@
 			board_deleted = 'N'
 	</select>
 	
+	<!-- 
+		id="getBoardNo" 
+			이 SQL 구문의 식별자를 정의한다.
+		parameterClass="int" 
+			이 SQL 구문을 실행할 때 필요한 값의 타입을 정의한다.
+			int는 java.lang.Integer의 별칭이다.
+		resultClass="vo.Board"
+			이 SQL 구문의 실행결과를 저장할 객체의 타입을 정의한다.
+	 -->
+	<select id="getBoardByNo" parameterClass="int" resultClass="vo.Board">
+		SELECT A.BOARD_NO               as no,
+        	   A.BOARD_TITLE            as title,
+               A.USER_NO                as "user.no",
+               B.USER_NAME              as "user.name",
+               A.BOARD_REPLY_CNT        as replyCnt,
+               A.BOARD_DELETED			as deleted,
+               A.BOARD_CONTENT          as content,
+               A.BOARD_CREATED_DATE     as createdDate,
+               A.BOARD_UPDATED_DATE     as updatedDate
+		FROM COMM_BOARDS A, COMM_USERS B
+		WHERE A.BOARD_NO = #value# 
+		AND A.USER_NO = B.USER_NO
+	</select>
+	
+	<update id="updateBoard" parameterClass="vo.Board">
+		update comm_boards
+		set
+			board_title= #title#,
+			board_content = #content#,
+			board_reply_cnt = #replyCnt#,
+			board_deleted = #deleted#,
+			board_updated_date = sysdate
+		where
+			board_no = #no#
+	</update>
+	
 </sqlMap>

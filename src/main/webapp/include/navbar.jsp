@@ -43,6 +43,13 @@
 				<a class="nav-link <%="todo".equals(menu) ? "active" : "" %>" href="/community/todo/list.jsp">일정관리</a>
 			</li>
 		</ul>
+<%
+	if (loginUser != null) {
+%>		
+		<span class="navbar-text me-3 small"><strong  class="text-white"><%=loginUser.getName() %></strong>님 환영합니다.</span>
+<%
+	}
+%>		
 		<ul class="navbar-nav">
 <%
 	if (loginUser == null) {
