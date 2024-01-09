@@ -42,6 +42,9 @@
 			<li class="nav-item">
 				<a class="nav-link <%="todo".equals(menu) ? "active" : "" %>" href="/community/todo/list.jsp">일정관리</a>
 			</li>
+			<li class="nav-item">
+				<a class="nav-link <%="file".equals(menu) ? "active" : "" %>" href="/community/file/list.jsp">파일게시판</a>
+			</li>
 		</ul>
 <%
 	if (loginUser != null) {

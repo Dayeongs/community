@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE sqlMap
+   PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+   "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+   
+<sqlMap namespace="file-boards">
+
+	<insert id="insertFileBoard" parameterClass="vo.FileBoard">
+		insert into comm_file_boards
+		(file_board_no, file_board_title, file_board_description, 
+		file_board_file_name, file_board_file_size, user_no)
+		values
+		(files_seq.nextval, #title#, #description#, #fileName#, 
+		#fileSize#, #user.no#)
+	</insert>
+	
+	<select id="getFileBoards" resultClass="vo.FileBoard">
+		select
+			A.file_board_no				as no,
+			A.file_board_title			as title,
+			A.file_board_description	as description,
+			A.file_board_deleted		as deleted,
+			A.user_no					as "user.no",
+			B.user_name					as "user.name",
+			A.file_board_file_name		as fileName,
+			A.file_board_file_size 		as fileSize,
+			A.file_board_updated_date	as updatedDate,
+			A.file_board_created_date	as createdDate
+		from
+			comm_file_boards A, comm_users B
+		where
+			A.file_board_deleted = 'N'
+			and A.user_no = B.user_no
+		order by 
+			A.file_board_no desc			
+	</select>
+	
+	<select id="getFileBoardByNo" parameterClass="int" resultClass="vo.FileBoard">
+		select
+			A.file_board_no				as no,
+			A.file_board_title			as title,
+			A.file_board_description	as description,
+			A.file_board_deleted		as deleted,
+			A.user_no					as "user.no",
+			B.user_name					as "user.name",
+			A.file_board_file_name		as fileName,
+			A.file_board_file_size 		as fileSize,
+			A.file_board_updated_date	as updatedDate,
+			A.file_board_created_date	as createdDate
+		from
+			comm_file_boards A, comm_users B
+		where
+			A.file_board_no = #value#
+			and A.file_board_deleted = 'N'
+			and A.user_no = B.user_no		
+	</select>
+
+</sqlMap>
