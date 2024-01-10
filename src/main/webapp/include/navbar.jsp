@@ -45,6 +45,9 @@
 			<li class="nav-item">
 				<a class="nav-link <%="file".equals(menu) ? "active" : "" %>" href="/community/file/list.jsp">파일게시판</a>
 			</li>
+			<li class="nav-item">
+				<a class="nav-link <%="product".equals(menu) ? "active" : "" %>" href="/community/product/list.jsp">상품게시판</a>
+			</li>
 		</ul>
 <%
 	if (loginUser != null) {

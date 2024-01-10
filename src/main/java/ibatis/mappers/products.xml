@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE sqlMap
+   PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+   "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+   
+<sqlMap namespace="products">
+
+	<!-- 모든 상품 카테고리를 조회해서 반환한다. -->
+	<select id="getAllProductCategories" resultClass="vo.ProductCategory">
+		select
+			category_no			as no,
+			category_name		as name
+		from
+			comm_product_categories
+		order by
+			category_no asc
+	</select>
+	
+	<!-- 모든 회사정보를 조회해서 반환한다. -->
+	<select id="getAllCompanies" resultClass="vo.Company">
+		select
+			company_no		as no,
+			company_name	as name,
+			company_tel		as tel,
+			company_city 	as city
+		from
+			comm_product_companies
+		order by 
+			company_no asc
+	</select>
+	
+	<!-- 모든 상품 상태정보를 조회해서 반환한다. -->
+	<select id="getAllProductStatus" resultClass="vo.ProductStatus">
+		select 
+			status_no		as no,
+			status_name		as name
+		from
+			comm_product_status
+		order by 
+			status_no asc
+	</select>
+	
+	<!-- 모든 이벤트를 조회해서 반환한다. -->
+	<select id="getAllEvents" resultClass="vo.Event">
+		select 
+			event_no			as no,
+			event_title			as title,
+			event_description	as description
+		from
+			comm_events
+		order by 
+			event_no asc
+	</select>
+	
+	<!-- 상품번호용 새 일련번호를 조회해서 반환한다. -->
+	<select id="getProductNo" resultClass="int">
+		select products_seq.nextval
+		from dual
+	</select>
+	
+	<!-- 
+		변수명 확인!
+		public class Product {
+			private int no;
+			private String name;
+			private ProductCategory cat;
+			private Company company;
+			private int price;
+			private int discountPrice;
+			private String description;
+			private ProductStatus status;
+		}
+	 -->
+	<!-- 신규 상품정보를 저장시킨다. -->
+	<insert id="insertProduct" parameterClass="vo.Product">
+		insert into comm_products
+		(product_no, product_name, category_no, company_no,
+		 product_price, product_discount_price, product_description, status_no)
+		values
+		(#no#, #name#, #cat.no#, #company.no#, 
+		 #price#, #discountPrice#, #description#, #status.no#)
+	</insert>
+	
+	<!-- 신규 상품의 이벤트 정보를 저장시킨다. -->
+	<insert id="insertProductEvent" parameterClass="vo.ProductEvent">
+		insert into comm_product_events
+		(product_no, event_no)
+		values
+		(#product.no#, #event.no#)
+	</insert>
+	
+	<select id="getAllProducts" resultClass="vo.Product">
+		select
+			A.product_no				as no,
+      		A.product_name				as name,
+       		B.company_name				as "company.name",
+       		A.product_price				as price,
+       		C.status_name				as "status.name",
+       		A.product_created_date 		as createdDate
+		from 
+			comm_products A, 
+     		comm_product_companies B,
+     		comm_product_status C
+		where 
+			A.company_no = B.company_no
+		    and A.status_no = C.status_no
+		order by 
+			A.product_no desc
+	</select>
+	
+	<select id="getProductByNo" parameterClass="int" resultClass="vo.Product">
+		select
+			A.product_no				as no,
+			A.category_no				as "cat.no",
+			D.category_name				as "cat.name",
+      		A.product_name				as name,
+       		A.company_no				as "company.no",
+       		B.company_name				as "company.name",
+       		A.product_price				as price,
+       		A.product_discount_price	as discountPrice,
+       		A.product_stock				as stock,
+       		A.status_no					as "status.no",
+       		C.status_name				as "status.name",
+       		A.product_created_date 		as createdDate,
+       		A.product_updated_date		as updatedDate
+		from 
+			comm_products A, 
+     		comm_product_companies B,
+     		comm_product_status C,
+     		comm_product_categories D
+		where 
+			A.company_no = B.company_no
+		    and A.status_no = C.status_no
+		    and A.category_no = D.category_no
+			and A.product_no = #value#
+	</select>
+	
+	<select id="getEventByProductNo" parameterClass="int" resultClass="vo.Event">
+		select 
+			event_no			as no,
+			event_title			as title,
+			event_description	as description
+		from
+			comm_events
+		where
+			event_no in (select event_no
+						 from comm_product_events
+						 where product_no=#value#)
+	</select>
+	
+</sqlMap>
