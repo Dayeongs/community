@@ -8,10 +8,6 @@
 
 <%
 	LoginUser loginUser = (LoginUser) session.getAttribute("LOGIN_USER");
-	if (loginUser == null) {
-		response.sendRedirect("../loginform.jsp?error=deny");
-		return;
-	}
 
 	int categoryNo = Integer.parseInt(request.getParameter("categoryNo"));
 	String title = request.getParameter("title");

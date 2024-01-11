@@ -12,10 +12,6 @@
 	*/
 	
 	LoginUser loginUser = (LoginUser) session.getAttribute("LOGIN_USER");
-	if (loginUser == null) {
-		response.sendRedirect("/community/board/delete.jsp?error=deny");
-		return;
-	}
 	
 	// 1. 요청파라미터 값 조회하기
 	int no = Integer.valueOf(request.getParameter("no"));

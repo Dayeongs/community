@@ -53,6 +53,9 @@
 			<form class="border bg-light p-3" 
 				method="post" 
 				action="modify.jsp">
+				
+				<input type="hidden" name="no" value="<%=product.getNo() %>" />
+				
 				<div class="form-group mb-3">
 					<label class="form-label">카테고리</label>
 					<select class="form-select" name="catNo">
@@ -95,19 +98,19 @@
 				</div>
 				<div class="form-group mb-3">
 					<label class="form-label">상품이름</label>
-					<input type="text" class="form-control" name="name" />
+					<input type="text" class="form-control" name="name" value="<%=product.getName() %>"/>
 				</div>
 				<div class="form-group mb-3">
 					<label class="form-label">상품가격</label>
-					<input type="text" class="form-control" name="price" />
+					<input type="text" class="form-control" name="price" value="<%=product.getPrice() %>"/>
 				</div>
 				<div class="form-group mb-3">
 					<label class="form-label">상품할인가격</label>
-					<input type="text" class="form-control" name="discountPrice" />
+					<input type="text" class="form-control" name="discountPrice" value="<%=product.getDiscountPrice() %>" />
 				</div>
 				<div class="form-group mb-3">
 					<label class="form-label">상품설명</label>
-					<textarea rows="3" class="form-control" name="description"></textarea>
+					<textarea rows="3" class="form-control" name="description"><%=product.getDescription() %></textarea>
 				</div>
 				<div class="form-group mb-3">
 					<label class="form-label">이벤트</label>

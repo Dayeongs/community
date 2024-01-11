@@ -6,11 +6,7 @@
     pageEncoding="UTF-8"%>
 <%
 	LoginUser loginUser = (LoginUser) session.getAttribute("LOGIN_USER");
-	if (loginUser == null) {
-		response.sendRedirect("../loginform.jsp?error=deny");
-		return;
-	}
-	
+
 	/*
 		요청 URL
 			localhost/comm/board.insert.jsp

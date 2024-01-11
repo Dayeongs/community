@@ -120,6 +120,7 @@
        		A.product_price				as price,
        		A.product_discount_price	as discountPrice,
        		A.product_stock				as stock,
+       		A.product_description		as description,
        		A.status_no					as "status.no",
        		C.status_name				as "status.name",
        		A.product_created_date 		as createdDate,
@@ -146,7 +147,31 @@
 		where
 			event_no in (select event_no
 						 from comm_product_events
-						 where product_no=#value#)
+						 where product_no = #value#)
 	</select>
+	
+	<update id="updateProduct" parameterClass="vo.Product">
+		update
+			comm_products
+		set
+			product_name = #name#,
+			category_no = #cat.no#,
+			company_no = #company.no#,
+			product_price = #price#,
+			product_discount_price = #discountPrice#,
+			product_description = #description#,
+			status_no = #status.no#,
+			product_stock = #stock#,
+			product_updated_date = sysdate
+		where
+			product_no = #no#
+	</update>
+	
+	<delete id="deleteProductEventsByProductNo" parameterClass="int">
+		delete from
+			comm_product_events
+		where 
+			product_no = #value#
+	</delete>
 	
 </sqlMap>

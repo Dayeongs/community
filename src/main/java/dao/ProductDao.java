@@ -96,4 +96,22 @@ public class ProductDao {
 		return (List<Event>) ibatis.queryForList("products.getEventByProductNo", ProductNo);
 	}
 	
+	/**
+	 * 수정된 상품정보가 포함된 정보를 전달받아서 반영시킨다.
+	 * @param product 수정된 상품정보가 포함된 Prdocut 객체
+	 * @throws SQLException
+	 */
+	public void updateProduct(Product product) throws SQLException {
+		ibatis.update("products.updateProduct", product);
+	}
+	
+	/**
+	 * 지정된 상품번호로 등록된 모든 이벤트를 삭제한다.
+	 * @param productNo	이벤트를 삭제할 상품번호
+	 * @throws SQLException
+	 */
+	public void deleteProductEventsByProductNo(int productNo) throws SQLException {
+		ibatis.delete("products.deleteProductEventsByProductNo", productNo);
+	}
+	
 }

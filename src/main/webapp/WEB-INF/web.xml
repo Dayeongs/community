@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="https://jakarta.ee/xml/ns/jakartaee" xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee https://jakarta.ee/xml/ns/jakartaee/web-app_6_0.xsd" id="WebApp_ID" version="6.0">
+  
+  	<!-- LoginCheckFilter 배포하기 -->
+  	<filter>
+  		<filter-name>logincheck</filter-name>
+  		<filter-class>web.LoginCheckFilter</filter-class>
+  		
+  		<!--  
+  			<init-param>태그로 설정한 설정정보는 LoginCheckFilter 객체 전용의 FilterConfig객체에 등록된다.
+  		-->
+  		<!--  
+	  		<init-param>
+	  			<param-name>attrName</param-name>
+	  			<param-value>LOGIN_USER</param-value>
+	  		</init-param>
+  		-->
+  	</filter>
+  	<filter>
+  		<filter-name>timecheck</filter-name>
+  		<filter-class>web.RunningTimeCheckFilter</filter-class>
+  	</filter>
+  	
+  	<filter-mapping>
+  		<filter-name>logincheck</filter-name>
+  		<url-pattern>/*</url-pattern>
+  	</filter-mapping>
+  	<filter-mapping>
+  		<filter-name>timecheck</filter-name>
+  		<url-pattern>/*</url-pattern>
+  	</filter-mapping>
+  	
+  	<!-- HttpSession의 만료시간(분 단위)을 설정한다. -->
+  	<session-config>
+  		<session-timeout>30</session-timeout>
+  	</session-config>
+  	
+  	<!-- 에러페이지 설정하기 -->
+  	<error-page>
+  		<error-code>404</error-code>
+  		<location>/error/404.jsp</location>
+  	</error-page>
+  	<error-page>
+  		<error-code>500</error-code>
+  		<location>/error/server.jsp</location>
+  	</error-page>
+  	
+</web-app>

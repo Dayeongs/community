@@ -16,10 +16,6 @@
  			 	상대 경로 = ../loginform.jsp
  	*/
  	LoginUser loginUser = (LoginUser) session.getAttribute("LOGIN_USER");
- 	if (loginUser == null) {
- 		response.sendRedirect("../loginform.jsp?error=deny");
- 		return;
- 	}
  %>
 <!DOCTYPE html>
 <html lang="ko">
