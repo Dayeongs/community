@@ -35,6 +35,6 @@ public class LoginUser {
 	@Override
 	public String toString() {
 		return "LoginUser [no=" + no + ", id=" + id + ", name=" + name + "]";
-	};
+	}
 
 }

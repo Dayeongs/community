@@ -1,4 +1,4 @@
-package web;
+package web.filter;
 
 import java.io.IOException;
 

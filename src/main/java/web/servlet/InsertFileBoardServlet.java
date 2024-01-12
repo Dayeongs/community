@@ -1,4 +1,4 @@
-package web;
+package web.servlet;
 
 import java.io.File;
 import java.io.FileOutputStream;
