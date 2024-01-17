@@ -53,11 +53,18 @@
 			<form class="border bg-light p-3" method="post" action="register.jsp" onsubmit="checkRegisterForm(event)">
 				<div class="form-group">
 					<label class="form-label">아이디</label>
-					<input type="text" class="form-control" name="id"/>
+					<input type="text" class="form-control" name="id" onkeyup="checkId()" />
 				</div>
+				<div id="id-feedback" class="form-text"></div>
 				<div class="form-group mb-3">
 					<label class="form-label">비밀번호</label>
-					<input type="password" class="form-control" name="password"/>
+					<input type="password" onkeyup="checkPassword()" class="form-control" name="password"/>
+					<div id="password-valid-feedback" class="form-text text-success d-none">
+						유효한 비밀번호입니다.
+					</div>
+					<div id="password-invalid-feedback" class="form-text text-danger d-none">
+						비밀번호는 8글자 이상, 영어대소문자+숫자+특수문자 조합입니다.
+					</div>
 				</div>
 				<div class="form-group mb-3">
 					<label class="form-label">이름</label>
@@ -80,6 +87,66 @@
 	</div>
 </div>
 <script type="text/javascript">
+
+	function checkId() {
+		let idRegExp = /^[a-zA-Z0-9]{3,}$/;
+		
+		let feedbackDiv = document.getElementById("id-feedback");
+		let idInput = document.querySelector("input[name=id]");
+		let id = idInput.value;
+		
+		if(!idRegExp.test(id)) { // 유효하지 않은 아이디는 서버로 보내지 않는다.
+			feedbackDiv.textContent = "아이디는 3글자이상, 영어대소문자+숫자 조합입니다.";
+			feedbackDiv.classList.remove('text-success');
+			feedbackDiv.classList.add('text-danger');
+			return;
+		}
+		
+		let xhr = new XMLHttpRequest();
+		xhr.onreadystatechange = function() {
+			if (xhr.readyState === 4 && xhr.status === 200) {
+				// 서버가 보낸 응답데이터를 조회한다.
+				let message = xhr.responseText;
+				if (message === "exist") {
+					feedbackDiv.textContent = "이미 사용중인 아이디입니다.";
+					feedbackDiv.classList.remove('text-success');
+					feedbackDiv.classList.add('text-danger');
+				} else if (message === "none") {
+					feedbackDiv.textContent = "사용가능한 아이디입니다.";
+					feedbackDiv.classList.remove('text-danger');
+					feedbackDiv.classList.add('text-success');
+				}
+			}
+		}
+		xhr.open('GET', 'checkId.jsp?id=' + id);
+		xhr.send();
+		
+	}
+	
+	function checkPassword() {
+		 let passwordRegExp = /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{8,15}$/;
+		 
+		 let passwordInput = document.querySelector("input[name=password]");
+		 
+		 let validFeedbackDiv = document.getElementById("password-valid-feedback");
+		 let invalidFeedbackDiv = document.getElementById("password-invalid-feedback");
+		 
+		 // 유효한-피드백-클래스속성값과 안유요한-피드백-클래스속성값을 조회한다.
+		 // validClassList -> ['form-text' 'text-success' 'd-none']
+		 // invalidClassList -> ['form-text' 'text-danger' 'd-none']
+		 let validClassList = validFeedbackDiv.classList;
+		 let invalidClassList = invalidFeedbackDiv.classList;
+		 
+		 let password = passwordInput.value;
+		 if (passwordRegExp.test(password)) {
+			 validClassList.remove('d-none');
+			 invalidClassList.add('d-none');
+		 } else {
+			 validClassList.add('d-none');
+			 invalidClassList.remove('d-none');
+		 }
+	}
+
 /*
  	회원가입 폼 입력값 유효성 체크하기
  		1. 아이디, 비밀번호, 이름, 이메일, 전화번호는 필수 입력값이다.
@@ -95,8 +162,12 @@
 		// let idRegExp = new regExp("표현식")
 		
 		// 아이디 정규표현식 - 영어대소문자+숫자 조합
-		let idRegExp = /^[a-zA-Z0-9]{6,}$/;
-	
+     	let idRegExp = /^[a-zA-Z0-9]{3,}$/;
+      	let passwordRegExp = /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{8,15}$/;
+      	let nameRegExp = /^[가-힣]{2,}$/;
+      	let emailRegExp = /^[a-z0-9\.\-_]+@([a-z0-9\-]+\.)+[a-z]{2,6}$/;
+      	let telRegExp = /^\d{3}-\d{3,4}-\d{4}$/;
+      	
 		// 1. 입력필드 엘리먼트를 조회한다.
 		let idInput = document.querySelector("input[name=id]");
 		let passwordInput = document.querySelector("input[name=password]");
@@ -120,16 +191,31 @@
 			
 			return;
 		}
-		// 아이디 검증 - 6글자 이상, 영어대소문자/숫자 조합
+		// 아이디 검증 - 3글자 이상, 영어대소문자/숫자 조합
 		if (!idRegExp.test(id)) {
 			event.preventDefault();
-			alert("아이디는 영어대소문자+숫자조합, 6글자 이상입니다.");
+			alert("아이디는 영어대소문자+숫자조합, 3글자 이상입니다.");
 			idInput.focus();
 			
 			return;
 		}
 		
-		// 비밀번호 검증
+		// 비밀번호 검증 - 필수 입력값 검증
+		if (!password) {
+			event.preventDefault();
+			alert("비밀번호는 필수입력값입니다.");
+			passwordInput.focus();
+			return;
+		}
+		
+		// 비밀번호 검증 - 8글자 이상, 영어대소문자/숫자/특수문자 조합
+		if (!passwordRegExp.test(password)) {
+			event.preventDefault();
+			alert("비밀번호는 8글자 이상, 영어대소문자/숫자/특수문자 조합입니다.");
+			passwordInput.focus();
+			return;
+		}
+		
 		// 이름 검증
 		// 이메일 검증
 		// 전화번호 검증
