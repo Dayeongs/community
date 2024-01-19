@@ -50,7 +50,8 @@
 		  	   B.user_name				as "user.name",
 		   	   A.board_reply_cnt		as replyCnt,
 		   	   A.board_created_date	as createdDate
-		from (select row_number() over (order by board_no desc) num,
+		from (select 
+					 row_number() over (order by board_no desc) num,
 				 	 board_no,
 				 	 board_title,
 				 	 user_no,
@@ -60,7 +61,19 @@
 		  	  from
 				 	 comm_boards
 		  	  where
-				 	 board_deleted = 'N') A, comm_users B
+				 	 board_deleted = 'N'
+				 	 <isEqual property="opt" compareValue="title">
+						and board_title like '%' || #keyword# || '%'
+					 </isEqual>
+					 <isEqual property="opt" compareValue="writer">
+						and user_no in (select user_no
+								  from comm_users
+								  where user_name = #keyword#)	
+					 </isEqual>
+					 <isEqual property="opt" compareValue="content">
+						and board_content like '%' || #keyword# || '%'
+					 </isEqual>
+			  ) A, comm_users B
 		where A.num between #begin# and #end#
 		and A.user_no = B.user_no
 		order by A.board_no desc	
@@ -69,18 +82,36 @@
 	<!-- 
 		id="getTotalRows"
 			이 SQL 구문의 식별자를 정의한다.
+		parameterClass="map"
+			이 SQL 구문의 실행에 필요한 값은 Map으로 전달받는다.
+			map은 java.util.Map의 별칭이다.
+			전달받은 Map객체에는 key/value로 
+							opt=title, opt=writer, opt=content
+							keyword=검색어
+			정보가 포함되어 있다.
 		resultClass="int"
 			이 SQL 구문을 실행해서 획득된 값을 java.lang.Integer 객체에 담아서 반환해라
 			int는 java.lang.Integer의 별칭이다.
 		* 이 SQL 구문은 ?가 하나도 필요없기 때문에 parameterClass 속성을 정의할 필요가 없다.
 	 -->
-	<select id="getTotalRows" resultClass="int">
+	<select id="getTotalRows" parameterClass="map" resultClass="int">
 		select 
 			count(*)
 		from 
 			comm_boards
 		where 
 			board_deleted = 'N'
+			<isEqual property="opt" compareValue="title">
+				and board_title like '%' || #keyword# || '%'
+			</isEqual>
+			<isEqual property="opt" compareValue="writer">
+				and user_no in (select user_no
+								from comm_users
+								where user_name = #keyword#)	
+			</isEqual>
+			<isEqual property="opt" compareValue="content">
+				and board_content like '%' || #keyword# || '%'
+			</isEqual>
 	</select>
 	
 	<!-- 
